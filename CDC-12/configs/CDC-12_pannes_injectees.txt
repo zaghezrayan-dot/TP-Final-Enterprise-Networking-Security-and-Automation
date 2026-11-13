@@ -1,0 +1,19 @@
+! CDC-12 - pannes injectees par l'etudiant (maquette GNS3, 12/11/2026)
+! Le sujet prevoit une injection par le formateur ; ici les pannes sont auto-injectees.
+
+! Panne 1 - couche 2 : port d'acces desactive (ACC-SW1) - 11:02:35
+! (port-security / err-disabled non supporte par l'IOS des NM-16ESW : essai refuse)
+interface FastEthernet1/2
+ shutdown
+
+! Panne 2 - couche 2 : VLAN 40 retire du trunk Po2 (ACC-SW1) - 11:11:10
+! (premier essai "switchport trunk allowed vlan 20,30,60,99" refuse : liste sans 1-2,1002-1005)
+interface Port-channel2
+ switchport trunk allowed vlan remove 40
+
+! Panne 3 - couche 4 : ACL qui bloque SNMP (UDP 161) depuis la VM de supervision (CORE-SW1) - 11:03
+ip access-list extended ACL-MGMT-IN
+ deny udp host 10.10.99.10 any eq snmp
+ permit ip any any
+interface Vlan99
+ ip access-group ACL-MGMT-IN in

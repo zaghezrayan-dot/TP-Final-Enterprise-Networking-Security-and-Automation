@@ -1,0 +1,46 @@
+---
+# CDC-14 - Deploiement idempotent de VLAN sur les commutateurs NM-16ESW (IOS 12.4).
+# Pourquoi pas ios_vlan : ce module lit "show vlan brief", absent sur NM-16ESW (c'est "show vlan-switch brief").
+# Idempotence : on lit l'etat reel, puis on n'applique que ce qui manque.
+- name: Deployer les VLAN decrits dans vlans.yml
+  hosts: "{{ cible | default('acces') }}"
+  gather_facts: false
+  vars_files:
+    - vlans.yml
+
+  tasks:
+    - name: Lire les VLAN existants (etat reel)
+      ios_command:
+        commands: show vlan-switch brief
+      register: vlans_existants
+
+    - name: Creer les VLAN manquants (ne fait rien s'ils existent deja)
+      ios_config:
+        parents: "vlan {{ item.id }}"
+        lines:
+          - "name {{ item.name }}"
+      loop: "{{ vlans }}"
+      when: (item.id | string ~ ' ') not in vlans_existants.stdout[0] or item.name not in vlans_existants.stdout[0]
+      notify: sauvegarder
+
+    - name: Affecter les ports (mode acces)
+      ios_config:
+        parents: "interface {{ item.1 }}"
+        lines:
+          - switchport mode access
+          - "switchport access vlan {{ item.0.id }}"
+      loop: "{{ vlans | subelements('ports') }}"
+
+    - name: Verifier le resultat
+      ios_command:
+        commands: show vlan-switch brief
+      register: vlans_finaux
+
+    - name: Afficher les VLAN apres deploiement
+      debug:
+        msg: "{{ vlans_finaux.stdout_lines[0] }}"
+
+  handlers:
+    - name: sauvegarder
+      ios_command:
+        commands: write memory

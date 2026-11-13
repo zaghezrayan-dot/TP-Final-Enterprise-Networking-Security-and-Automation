@@ -1,0 +1,17 @@
+! CDC-12 - corrections appliquees
+
+! Panne 1 - ACC-SW1 (11:08:44)
+interface FastEthernet1/2
+ no shutdown
+
+! Panne 2 - ACC-SW1 (11:12)
+interface Port-channel2
+ no switchport trunk allowed vlan
+
+! Panne 3 - CORE-SW1
+interface Vlan99
+ no ip access-group ACL-MGMT-IN in
+exit
+no ip access-list extended ACL-MGMT-IN
+
+! puis "write memory" sur ACC-SW1 et CORE-SW1

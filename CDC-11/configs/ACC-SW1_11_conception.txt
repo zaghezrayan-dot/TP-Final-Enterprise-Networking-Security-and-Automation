@@ -1,0 +1,8 @@
+! CDC-11 — ACC-SW1 (extrait). Reconstitué ; à comparer avec "show running-config".
+interface FastEthernet1/0
+ channel-group 2 mode on
+interface FastEthernet1/3
+ switchport mode trunk
+ channel-group 2 mode on
+interface Port-channel2
+ switchport mode trunk

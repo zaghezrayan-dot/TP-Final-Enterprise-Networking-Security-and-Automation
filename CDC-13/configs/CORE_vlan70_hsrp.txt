@@ -1,0 +1,16 @@
+! CDC-13 - nouveau VLAN 70 sur les coeurs (meme modele que les VLAN 20/30/40/60 de CDC-11) - NON TESTE
+! CORE-SW1
+interface Vlan70
+ ip address 10.10.70.2 255.255.255.0
+ standby 70 ip 10.10.70.1
+ standby 70 priority 110
+ standby 70 preempt
+ standby 70 track FastEthernet0/0 20
+spanning-tree vlan 70 priority 4096
+! CORE-SW2
+interface Vlan70
+ ip address 10.10.70.3 255.255.255.0
+ standby 70 ip 10.10.70.1
+ standby 70 priority 100
+ standby 70 preempt
+spanning-tree vlan 70 priority 8192

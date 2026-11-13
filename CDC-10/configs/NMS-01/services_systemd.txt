@@ -1,0 +1,12 @@
+# Trois services systemd (snmp_exporter, prometheus, grafana), tous "Restart=always" et activés au démarrage.
+# Versions : Prometheus 2.53.0 - snmp_exporter 0.26.0 - Grafana 10.4.2
+# Exemple : /etc/systemd/system/grafana.service
+[Unit]
+Description=Grafana
+After=network-online.target
+[Service]
+WorkingDirectory=/opt/grafana
+ExecStart=/opt/grafana/bin/grafana-server --homepath=/opt/grafana
+Restart=always
+[Install]
+WantedBy=multi-user.target

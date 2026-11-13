@@ -1,0 +1,49 @@
+! CDC-11 — CORE-SW1 (extrait : lignes ajoutées pour le design hiérarchique)
+! Reconstitué à partir des commandes appliquées ; à comparer avec "show running-config".
+spanning-tree vlan 1 priority 4096
+spanning-tree vlan 20 priority 4096
+spanning-tree vlan 30 priority 4096
+spanning-tree vlan 40 priority 4096
+spanning-tree vlan 60 priority 4096
+spanning-tree vlan 99 priority 4096
+!
+interface FastEthernet1/1
+ switchport mode trunk
+ channel-group 1 mode on
+interface FastEthernet1/2
+ switchport mode trunk
+ channel-group 1 mode on
+interface Port-channel1
+ switchport mode trunk
+!
+interface FastEthernet0/0
+ speed 100
+ duplex full
+ ip ospf hello-interval 1
+ ip ospf dead-interval 3
+!
+! Pour chaque VLAN X de 20, 30, 40, 60 :
+interface Vlan20
+ ip address 10.10.20.2 255.255.255.0
+ standby 20 ip 10.10.20.1
+ standby 20 priority 110
+ standby 20 preempt
+ standby 20 track FastEthernet0/0 20
+interface Vlan30
+ ip address 10.10.30.2 255.255.255.0
+ standby 30 ip 10.10.30.1
+ standby 30 priority 110
+ standby 30 preempt
+ standby 30 track FastEthernet0/0 20
+interface Vlan40
+ ip address 10.10.40.2 255.255.255.0
+ standby 40 ip 10.10.40.1
+ standby 40 priority 110
+ standby 40 preempt
+ standby 40 track FastEthernet0/0 20
+interface Vlan60
+ ip address 10.10.60.2 255.255.255.0
+ standby 60 ip 10.10.60.1
+ standby 60 priority 110
+ standby 60 preempt
+ standby 60 track FastEthernet0/0 20

@@ -1,0 +1,12 @@
+---
+# CDC-14 - Description de l'intention : VLAN a deployer sur les commutateurs d'acces.
+# Un seul fichier de donnees : pour ajouter un VLAN, on ajoute un bloc ici, sans toucher au playbook.
+vlans:
+  - id: 70
+    name: TRI-WMS
+    ports:
+      - FastEthernet1/5
+  - id: 80
+    name: INVITES
+    ports:
+      - FastEthernet1/6

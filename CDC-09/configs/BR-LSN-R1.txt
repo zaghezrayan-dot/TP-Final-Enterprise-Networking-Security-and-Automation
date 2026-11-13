@@ -1,0 +1,19 @@
+hostname BR-LSN-R1
+no ip domain-lookup
+!
+interface Serial1/0
+ description Lien 2 - EDGE-R1 Serial2/0 (DTE)
+ ip address 10.0.2.2 255.255.255.252
+ bandwidth 2000
+ no shutdown
+!
+interface FastEthernet0/0
+ description LAN agence Lausanne - Serveur
+ ip address 10.20.20.1 255.255.255.0
+ no shutdown
+!
+router ospf 1
+ network 10.0.2.0 0.0.0.3 area 0
+ network 10.20.20.0 0.0.0.255 area 0
+!
+ip sla responder

@@ -1,0 +1,34 @@
+! CDC-10 - DIST-SW1 (c3745 + NM-16ESW, IOS 12.4(4)T1)
+! 1) En mode privilégié, AVANT "configure terminal" :
+!    vlan database
+!     vlan 99 name GESTION
+!     exit
+!
+! 2) Puis en mode de configuration. Les secrets sont masqués : ********
+! (le VLAN 99 circule sur les trunks existants du CDC-09)
+service timestamps log datetime msec
+!
+interface Vlan99
+ description Gestion
+ ip address 10.10.99.2 255.255.255.0
+ no shutdown
+!
+ip default-gateway 10.10.99.1
+!
+logging on
+logging host 10.10.99.10
+logging trap informational
+!
+ip access-list standard ACL-SNMP-NMS
+ permit 10.10.99.10
+!
+snmp-server view V-READ iso included
+snmp-server group G-NMS v3 priv read V-READ access ACL-SNMP-NMS
+snmp-server user nms-user G-NMS v3 auth sha ******** priv aes 128 ********
+snmp-server location Geneve
+snmp-server enable traps snmp linkdown linkup
+snmp-server host 10.10.99.10 version 3 priv nms-user
+!
+ntp server 10.0.3.1
+!
+! copy running-config tftp://10.10.99.10/DIST-SW1-confg

@@ -1,0 +1,43 @@
+! CDC-10 - CORE-SW1 (c3745 + NM-16ESW, IOS 12.4(4)T1)
+! 1) En mode privilégié, AVANT "configure terminal" :
+!    vlan database
+!     vlan 99 name GESTION
+!     exit
+!
+! 2) Puis en mode de configuration. Les secrets sont masqués : ********
+service timestamps log datetime msec
+service password-encryption
+enable secret ********
+!
+interface FastEthernet1/4
+ description Lien NMS-01 - Cloud GNS3 (VMnet1) - VLAN 99
+ switchport mode access
+ switchport access vlan 99
+ no shutdown
+!
+interface Vlan99
+ description Gestion - passerelle du VLAN 99
+ ip address 10.10.99.1 255.255.255.0
+ no shutdown
+!
+! Écart de duplex signalé par CDP (voir 5.5) : corrigé côté CORE-SW1
+interface FastEthernet0/0
+ duplex full
+!
+logging on
+logging host 10.10.99.10
+logging trap informational
+!
+ip access-list standard ACL-SNMP-NMS
+ permit 10.10.99.10
+!
+snmp-server view V-READ iso included
+snmp-server group G-NMS v3 priv read V-READ access ACL-SNMP-NMS
+snmp-server user nms-user G-NMS v3 auth sha ******** priv aes 128 ********
+snmp-server location Geneve
+snmp-server enable traps snmp linkdown linkup
+snmp-server host 10.10.99.10 version 3 priv nms-user
+!
+ntp server 10.0.3.1
+!
+! copy running-config tftp://10.10.99.10/CORE-SW1-confg

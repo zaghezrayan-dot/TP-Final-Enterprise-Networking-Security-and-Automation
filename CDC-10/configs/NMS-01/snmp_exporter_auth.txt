@@ -1,0 +1,11 @@
+# /opt/snmp_exporter/snmp.yml (extrait) - identifiants SNMPv3 : secrets masqués
+auths:
+  nova_v3:
+    version: 3
+    security_level: authPriv
+    username: nms-user
+    auth_protocol: SHA
+    password: ********
+    priv_protocol: AES
+    priv_password: ********
+# module utilisé : if_mib (ifOperStatus, ifInOctets, ifOutOctets, ifInErrors, ifOutDiscards...) + sysUpTime

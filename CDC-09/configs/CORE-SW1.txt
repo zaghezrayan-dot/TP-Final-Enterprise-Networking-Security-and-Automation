@@ -1,0 +1,39 @@
+! 1) En mode privilégié, AVANT "configure terminal" :
+!    vlan database
+!     vlan 20 name POSTES
+!     vlan 30 name ERP
+!     vlan 40 name VOIX
+!     vlan 60 name SAUVEGARDES
+!     exit
+!
+! 2) Puis en mode de configuration :
+hostname CORE-SW1
+no ip domain-lookup
+ip routing
+!
+interface FastEthernet0/0
+ description Lien 3 - EDGE-R1 Fa1/0 (port natif routé)
+ ip address 10.0.3.2 255.255.255.252
+ no shutdown
+!
+interface FastEthernet1/0
+ description Lien 4 - DIST-SW1 Fa1/0 (trunk)
+ switchport mode trunk
+ no shutdown
+!
+interface Vlan20
+ ip address 10.10.20.1 255.255.255.0
+ no shutdown
+interface Vlan30
+ ip address 10.10.30.1 255.255.255.0
+ no shutdown
+interface Vlan40
+ ip address 10.10.40.1 255.255.255.0
+ no shutdown
+interface Vlan60
+ ip address 10.10.60.1 255.255.255.0
+ no shutdown
+!
+router ospf 1
+ network 10.0.3.0 0.0.0.3 area 0
+ network 10.10.0.0 0.0.255.255 area 0

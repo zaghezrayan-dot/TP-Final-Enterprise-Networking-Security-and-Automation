@@ -1,0 +1,463 @@
+{
+  "uid": "novatrans-supervision",
+  "title": "NovaTrans - Supervision réseau",
+  "tags": [
+    "novatrans",
+    "snmp"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "version": 1,
+  "editable": true,
+  "refresh": "30s",
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "device",
+        "label": "Équipement",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus-novatrans"
+        },
+        "query": {
+          "query": "label_values(up{job=\"snmp\"}, device)",
+          "refId": "v"
+        },
+        "definition": "label_values(up{job=\"snmp\"}, device)",
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "sort": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Équipements joignables (SNMP)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 5
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "1": {
+                  "text": "UP",
+                  "color": "green",
+                  "index": 0
+                },
+                "2": {
+                  "text": "DOWN",
+                  "color": "red",
+                  "index": 1
+                },
+                "0": {
+                  "text": "DOWN",
+                  "color": "red",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "up{job=\"snmp\",device=~\"$device\"}",
+          "legendFormat": "{{device}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Uptime des équipements",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 5
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "sysUpTime{device=~\"$device\"} / 100",
+          "legendFormat": "{{device}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "État des interfaces (liaisons de la maquette)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "w": 24,
+        "h": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "1": {
+                  "text": "UP",
+                  "color": "green",
+                  "index": 0
+                },
+                "2": {
+                  "text": "DOWN",
+                  "color": "red",
+                  "index": 1
+                },
+                "0": {
+                  "text": "DOWN",
+                  "color": "red",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "ifOperStatus{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"} or ifOperStatus{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"} or ifOperStatus{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"} or ifOperStatus{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"} or ifOperStatus{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}",
+          "legendFormat": "{{device}} {{ifDescr}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Trafic entrant (bit/s)",
+      "description": "",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 13,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bps",
+          "custom": {
+            "lineWidth": 1,
+            "fillOpacity": 10
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "rate(ifInOctets{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"}[2m]) * 8 or rate(ifInOctets{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"}[2m]) * 8 or rate(ifInOctets{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"}[2m]) * 8 or rate(ifInOctets{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"}[2m]) * 8 or rate(ifInOctets{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}[2m]) * 8",
+          "legendFormat": "{{device}} {{ifDescr}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Trafic sortant (bit/s)",
+      "description": "",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 13,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bps",
+          "custom": {
+            "lineWidth": 1,
+            "fillOpacity": 10
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "rate(ifOutOctets{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"}[2m]) * 8 or rate(ifOutOctets{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"}[2m]) * 8 or rate(ifOutOctets{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"}[2m]) * 8 or rate(ifOutOctets{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"}[2m]) * 8 or rate(ifOutOctets{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}[2m]) * 8",
+          "legendFormat": "{{device}} {{ifDescr}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Erreurs d'interface (par seconde)",
+      "description": "",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 21,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": {
+            "lineWidth": 1,
+            "fillOpacity": 10
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "rate(ifInErrors{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"}[5m]) or rate(ifInErrors{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"}[5m]) or rate(ifInErrors{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"}[5m]) or rate(ifInErrors{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"}[5m]) or rate(ifInErrors{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}[5m]) or rate(ifOutErrors{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"}[5m]) or rate(ifOutErrors{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"}[5m]) or rate(ifOutErrors{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"}[5m]) or rate(ifOutErrors{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"}[5m]) or rate(ifOutErrors{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}[5m])",
+          "legendFormat": "{{device}} {{ifDescr}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Paquets abandonnés en sortie (par seconde)",
+      "description": "Montre les pertes liées à la congestion et à la file QoS (voir CDC-09).",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 21,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "pps",
+          "custom": {
+            "lineWidth": 1,
+            "fillOpacity": 10
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "rate(ifOutDiscards{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"}[2m]) or rate(ifOutDiscards{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"}[2m]) or rate(ifOutDiscards{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"}[2m]) or rate(ifOutDiscards{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"}[2m]) or rate(ifOutDiscards{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}[2m])",
+          "legendFormat": "{{device}} {{ifDescr}}",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}

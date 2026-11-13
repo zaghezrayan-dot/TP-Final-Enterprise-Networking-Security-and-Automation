@@ -1,0 +1,80 @@
+! === Classification ===
+ip access-list extended ACL-SIGNAL
+ permit udp 10.10.40.0 0.0.0.255 any eq 5060
+ permit tcp 10.10.40.0 0.0.0.255 any eq 5060
+ permit tcp 10.10.40.0 0.0.0.255 any eq 2000
+ip access-list extended ACL-VOIX
+ permit ip 10.10.40.0 0.0.0.255 any
+ip access-list extended ACL-ERP
+ permit ip 10.10.30.0 0.0.0.255 any
+ip access-list extended ACL-BACKUP
+ permit ip 10.10.60.0 0.0.0.255 any
+!
+! === Marquage a l'entree (Fa1/0, cote LAN) ===
+! La signalisation est testee AVANT la voix.
+class-map match-all CM-SIGNAL-IN
+ match access-group name ACL-SIGNAL
+class-map match-all CM-VOIX-IN
+ match access-group name ACL-VOIX
+class-map match-all CM-ERP-IN
+ match access-group name ACL-ERP
+class-map match-all CM-BACKUP-IN
+ match access-group name ACL-BACKUP
+!
+policy-map PM-MARQUAGE-IN
+ class CM-SIGNAL-IN
+  set dscp cs3
+ class CM-VOIX-IN
+  set dscp ef
+ class CM-ERP-IN
+  set dscp af31
+ class CM-BACKUP-IN
+  set dscp cs1
+!
+interface FastEthernet1/0
+ service-policy input PM-MARQUAGE-IN
+!
+! === Classes de traitement (lecture du DSCP) ===
+class-map match-all CM-VOIX
+ match dscp ef
+class-map match-all CM-SIGNAL
+ match dscp cs3
+class-map match-all CM-ERP
+ match dscp af31
+class-map match-all CM-BACKUP
+ match dscp cs1
+!
+! === Sortie LAN (liaison 3) : LLQ voix ===
+policy-map PM-LAN-OUT
+ class CM-VOIX
+  priority percent 30
+ class CM-SIGNAL
+  bandwidth percent 5
+ class CM-ERP
+  bandwidth percent 30
+ class class-default
+  fair-queue
+!
+interface FastEthernet1/0
+ service-policy output PM-LAN-OUT
+!
+! === Sortie WAN (liaison 2) : shaping 2 Mb/s + LLQ + plafond sauvegardes ===
+policy-map PM-WAN-CHILD
+ class CM-VOIX
+  priority percent 30
+ class CM-SIGNAL
+  bandwidth percent 5
+ class CM-ERP
+  bandwidth percent 35
+ class CM-BACKUP
+  shape average 400000
+ class class-default
+  fair-queue
+!
+policy-map PM-WAN-PARENT
+ class class-default
+  shape average 2000000
+  service-policy PM-WAN-CHILD
+!
+interface Serial2/0
+ service-policy output PM-WAN-PARENT

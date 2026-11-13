@@ -1,0 +1,18 @@
+hostname EDGE-R1
+no ip domain-lookup
+!
+interface FastEthernet1/0
+ description Lien 3 - CORE-SW1 Fa0/0
+ ip address 10.0.3.1 255.255.255.252
+ no shutdown
+!
+interface Serial2/0
+ description Lien 2 - BR-LSN-R1 Serial1/0 (DCE)
+ ip address 10.0.2.1 255.255.255.252
+ clock rate 2000000
+ bandwidth 2000
+ no shutdown
+!
+router ospf 1
+ network 10.0.2.0 0.0.0.3 area 0
+ network 10.0.3.0 0.0.0.3 area 0

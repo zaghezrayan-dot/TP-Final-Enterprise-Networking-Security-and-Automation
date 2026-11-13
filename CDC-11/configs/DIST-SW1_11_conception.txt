@@ -1,0 +1,22 @@
+! CDC-11 — DIST-SW1 (extrait). Reconstitué ; à comparer avec "show running-config".
+spanning-tree vlan 1 priority 16384
+spanning-tree vlan 20 priority 16384
+spanning-tree vlan 30 priority 16384
+spanning-tree vlan 40 priority 16384
+spanning-tree vlan 60 priority 16384
+spanning-tree vlan 99 priority 16384
+!
+interface FastEthernet1/0
+ description trunk vers CORE-SW1 Fa1/0
+ switchport mode trunk
+interface FastEthernet1/5
+ description trunk vers CORE-SW2 Fa1/5 (redondant)
+ switchport mode trunk
+ no shutdown
+interface FastEthernet1/1
+ channel-group 2 mode on
+interface FastEthernet1/3
+ switchport mode trunk
+ channel-group 2 mode on
+interface Port-channel2
+ switchport mode trunk

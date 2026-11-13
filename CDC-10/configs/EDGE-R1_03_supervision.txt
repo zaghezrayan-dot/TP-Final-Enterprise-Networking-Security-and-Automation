@@ -1,0 +1,24 @@
+! CDC-10 - Supervision, découverte et maintenance - EDGE-R1 (c7200, IOS 15.2(4)S7)
+! Les secrets sont masqués : ********
+service timestamps log datetime msec
+logging on
+logging host 10.10.99.10
+logging trap informational
+!
+ip access-list standard ACL-SNMP-NMS
+ permit 10.10.99.10
+!
+snmp-server view V-READ iso included
+snmp-server group G-NMS v3 priv read V-READ access ACL-SNMP-NMS
+snmp-server user nms-user G-NMS v3 auth sha ******** priv aes 128 ********
+snmp-server location Geneve
+snmp-server enable traps snmp linkdown linkup
+snmp-server host 10.10.99.10 version 3 priv nms-user
+!
+! Horloge de référence du réseau (stratum 2)
+ntp master 2
+!
+! CDP actif par défaut (cdp run). LLDP absent de cet IOS : "lldp run" est refusé.
+!
+! Sauvegarde de la configuration vers NMS-01 (à lancer en mode privilégié) :
+! copy running-config tftp://10.10.99.10/EDGE-R1-confg

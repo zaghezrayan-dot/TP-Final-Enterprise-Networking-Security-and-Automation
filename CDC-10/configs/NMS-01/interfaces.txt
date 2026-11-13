@@ -1,0 +1,8 @@
+# /etc/network/interfaces (extrait) - NMS-01, Ubuntu 16.04.5 LTS
+# ens33 = NAT (accès Internet pour l'installation des paquets)
+# ens37 = réseau de gestion, relié au Cloud GNS3 (VMnet1) puis au VLAN 99
+auto ens37
+iface ens37 inet static
+    address 10.10.99.10
+    netmask 255.255.255.0
+    up ip route add 10.0.0.0/8 via 10.10.99.1 || true

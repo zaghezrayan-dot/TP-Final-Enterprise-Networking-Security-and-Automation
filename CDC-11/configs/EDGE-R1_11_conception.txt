@@ -1,0 +1,15 @@
+! CDC-11 — EDGE-R1 (extrait). Reconstitué ; à comparer avec "show running-config".
+interface FastEthernet0/0
+ description Lien 3b - CORE-SW2 Fa0/0
+ ip address 10.0.4.1 255.255.255.252
+ speed 100
+ duplex full
+ ip ospf hello-interval 1
+ ip ospf dead-interval 3
+ ip ospf cost 100
+ no shutdown
+interface FastEthernet1/0
+ ip ospf hello-interval 1
+ ip ospf dead-interval 3
+router ospf 1
+ network 10.0.4.0 0.0.0.3 area 0

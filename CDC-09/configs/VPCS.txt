@@ -1,0 +1,9 @@
+# Console de PC-Voix
+ip 10.10.40.10/24 10.10.40.1
+save
+# Console de PC-Donnees
+ip 10.10.60.10/24 10.10.60.1
+save
+# Console de Serveur
+ip 10.20.20.10/24 10.20.20.1
+save

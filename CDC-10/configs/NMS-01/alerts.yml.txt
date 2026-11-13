@@ -1,0 +1,24 @@
+# /opt/prometheus/alerts.yml - règles d'alerte (promtool : "3 rules found")
+groups:
+  - name: novatrans
+    rules:
+      - alert: EquipementInjoignable
+        expr: up{job="snmp"} == 0
+        for: 1m
+        labels: { severity: critical }
+        annotations:
+          summary: "{{ $labels.device }} injoignable en SNMP"
+      - alert: InterfaceCritiqueDown
+        expr: ifOperStatus{device="BR-LSN-R1",ifDescr="FastEthernet0/0"} == 2 or ifOperStatus{device="EDGE-R1",ifDescr="Serial2/0"} == 2
+        for: 30s
+        labels: { severity: critical }
+        annotations:
+          summary: "Interface critique down sur {{ $labels.device }} ({{ $labels.ifDescr }})"
+      - alert: LiaisonWANSaturee
+        # Seuil du labo : 30 kbit/s (liaison WAN bridée à 500 kb/s dans la maquette).
+        # En production : 80 % de 2 Mb/s = 1,6 Mb/s -> "> 1600000"
+        expr: rate(ifOutOctets{device="EDGE-R1",ifDescr="Serial2/0"}[1m]) * 8 > 30000
+        for: 30s
+        labels: { severity: warning }
+        annotations:
+          summary: "Liaison WAN EDGE-R1 Serial2/0 au-dessus de 30 kbit/s"

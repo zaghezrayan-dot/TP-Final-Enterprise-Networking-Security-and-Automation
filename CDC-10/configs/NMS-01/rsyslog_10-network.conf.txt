@@ -1,0 +1,8 @@
+# /etc/rsyslog.d/10-network.conf - réception Syslog UDP/514, un fichier par équipement
+module(load="imudp")
+input(type="imudp" port="514")
+template(name="RemoteLogs" type="string" string="/var/log/remote/%fromhost-ip%.log")
+if ($fromhost-ip startswith "10.") then {
+  action(type="omfile" dynaFile="RemoteLogs")
+  stop
+}

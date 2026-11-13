@@ -1,0 +1,20 @@
+! CDC-10 - BR-LSN-R1 (c7200, IOS 15.2(4)S7) - agence de Lausanne
+! Les secrets sont masqués : ********
+service timestamps log datetime msec
+logging on
+logging host 10.10.99.10
+logging trap informational
+!
+ip access-list standard ACL-SNMP-NMS
+ permit 10.10.99.10
+!
+snmp-server view V-READ iso included
+snmp-server group G-NMS v3 priv read V-READ access ACL-SNMP-NMS
+snmp-server user nms-user G-NMS v3 auth sha ******** priv aes 128 ********
+snmp-server location Lausanne
+snmp-server enable traps snmp linkdown linkup
+snmp-server host 10.10.99.10 version 3 priv nms-user
+!
+ntp server 10.0.3.1
+!
+! copy running-config tftp://10.10.99.10/BR-LSN-R1-confg

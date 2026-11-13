@@ -1,0 +1,16 @@
+! NON TESTÉ DANS GNS3 (les NM-16ESW ne supportent pas LACP). Équivalent de production
+! sur des Catalyst 9200/9300 pour remplacer "channel-group N mode on" :
+interface range TenGigabitEthernet1/1/1 - 2
+ channel-group 2 mode active
+ lacp rate fast
+interface Port-channel2
+ switchport mode trunk
+ switchport trunk allowed vlan 20,30,40,60,99
+!
+! Passerelles redondantes sur les distributions (variante demandée par le sujet) :
+interface Vlan20
+ ip address 10.10.20.2 255.255.255.0
+ standby version 2
+ standby 20 ip 10.10.20.1
+ standby 20 priority 110
+ standby 20 preempt delay minimum 30

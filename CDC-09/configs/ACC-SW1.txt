@@ -1,0 +1,28 @@
+! 1) En mode privilégié, AVANT "configure terminal" :
+!    vlan database
+!     vlan 20 name POSTES
+!     vlan 30 name ERP
+!     vlan 40 name VOIX
+!     vlan 60 name SAUVEGARDES
+!     exit
+!
+! 2) Puis en mode de configuration :
+hostname ACC-SW1
+no ip domain-lookup
+!
+interface FastEthernet1/0
+ description Lien 5 - DIST-SW1 Fa1/1 (trunk)
+ switchport mode trunk
+ no shutdown
+!
+interface FastEthernet1/1
+ description Lien 6 - PC-Voix (VLAN 40)
+ switchport mode access
+ switchport access vlan 40
+ no shutdown
+!
+interface FastEthernet1/2
+ description Lien 6 - PC-Donnees (VLAN 60)
+ switchport mode access
+ switchport access vlan 60
+ no shutdown

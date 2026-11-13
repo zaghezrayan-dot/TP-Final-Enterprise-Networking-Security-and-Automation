@@ -1,0 +1,692 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "UP"
+                },
+                "2": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "DOWN"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "up{job=\"snmp\",device=~\"$device\"}",
+          "legendFormat": "{{device}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Équipements joignables (SNMP)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "sysUpTime{device=~\"$device\"} / 100",
+          "legendFormat": "{{device}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Uptime des équipements",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "UP"
+                },
+                "2": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "DOWN"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "ifOperStatus{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"} or ifOperStatus{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"} or ifOperStatus{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"} or ifOperStatus{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"} or ifOperStatus{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}",
+          "legendFormat": "{{device}} {{ifDescr}}",
+          "refId": "A"
+        }
+      ],
+      "title": "État des interfaces (liaisons de la maquette)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "rate(ifInOctets{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"}[2m]) * 8 or rate(ifInOctets{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"}[2m]) * 8 or rate(ifInOctets{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"}[2m]) * 8 or rate(ifInOctets{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"}[2m]) * 8 or rate(ifInOctets{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}[2m]) * 8",
+          "legendFormat": "{{device}} {{ifDescr}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Trafic entrant (bit/s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "rate(ifOutOctets{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"}[2m]) * 8 or rate(ifOutOctets{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"}[2m]) * 8 or rate(ifOutOctets{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"}[2m]) * 8 or rate(ifOutOctets{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"}[2m]) * 8 or rate(ifOutOctets{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}[2m]) * 8",
+          "legendFormat": "{{device}} {{ifDescr}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Trafic sortant (bit/s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 20
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "rate(ifInErrors{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"}[5m]) or rate(ifInErrors{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"}[5m]) or rate(ifInErrors{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"}[5m]) or rate(ifInErrors{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"}[5m]) or rate(ifInErrors{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}[5m]) or rate(ifOutErrors{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"}[5m]) or rate(ifOutErrors{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"}[5m]) or rate(ifOutErrors{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"}[5m]) or rate(ifOutErrors{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"}[5m]) or rate(ifOutErrors{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}[5m])",
+          "legendFormat": "{{device}} {{ifDescr}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Erreurs d'interface (par seconde)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-novatrans"
+      },
+      "description": "Montre les pertes liées à la congestion et à la file QoS (voir CDC-09).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-novatrans"
+          },
+          "expr": "rate(ifOutDiscards{device=\"EDGE-R1\",device=~\"$device\",ifDescr=~\"Serial2/0|FastEthernet1/0\"}[2m]) or rate(ifOutDiscards{device=\"BR-LSN-R1\",device=~\"$device\",ifDescr=~\"Serial1/0|FastEthernet0/0\"}[2m]) or rate(ifOutDiscards{device=\"CORE-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet0/0|FastEthernet1/0|FastEthernet1/4\"}[2m]) or rate(ifOutDiscards{device=\"DIST-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1\"}[2m]) or rate(ifOutDiscards{device=\"ACC-SW1\",device=~\"$device\",ifDescr=~\"FastEthernet1/0|FastEthernet1/1|FastEthernet1/2\"}[2m])",
+          "legendFormat": "{{device}} {{ifDescr}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Paquets abandonnés en sortie (par seconde)",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": [
+    "novatrans",
+    "snmp"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus-novatrans"
+        },
+        "definition": "label_values(up{job=\"snmp\"}, device)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Équipement",
+        "multi": true,
+        "name": "device",
+        "options": [],
+        "query": {
+          "query": "label_values(up{job=\"snmp\"}, device)",
+          "refId": "v"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "NovaTrans - Supervision réseau",
+  "uid": "novatrans-supervision",
+  "version": 2,
+  "weekStart": ""
+}

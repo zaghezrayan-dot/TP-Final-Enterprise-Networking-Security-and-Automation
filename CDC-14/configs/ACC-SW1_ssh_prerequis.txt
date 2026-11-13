@@ -1,0 +1,10 @@
+! CDC-14 - Prerequis SSH pour Ansible sur les commutateurs (IOS 12.4, NM-16ESW) - FOURNI, NON CONFIRME COMME APPLIQUE
+ip domain-name novatrans.local
+crypto key generate rsa modulus 1024
+ip ssh version 2
+username ansible privilege 15 secret ********
+line vty 0 4
+ login local
+ transport input ssh
+ip default-gateway 10.10.99.1
+! Etat constate avant configuration : "show ip ssh" -> SSH Disabled - version 1.99 (pas de cles RSA)
