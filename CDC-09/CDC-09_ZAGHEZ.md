@@ -3,7 +3,7 @@
 **Client :** NovaTrans Romandie SA · **Prestataire :** Satom IT & Learning Solutions
 **Besoin couvert :** B1 — Voix et ERP protégés sur les liaisons WAN
 **Plateforme :** GNS3 (routeurs c7200 IOS 15.2, commutateurs simulés par c3745 + NM-16ESW)
-**Ingénieur :** Rayan Zaghez · **Date :** _à compléter_
+**Ingénieur :** Rayan Zaghez · **Date :** novembre 2026
 
 ---
 
@@ -373,7 +373,7 @@ iperf3 -c 10.20.20.10 -u -b 5M -l 1400 -t 120      # côté Genève, VLAN 60
 | B | Congestion (flood), politique de base `PM-BASE` | `show ip sla statistics 10` (perte, gigue, latence) | Figure 5 |
 | C | Congestion (flood), politique complète `PM-WAN-PARENT` | `show ip sla statistics 10` | Figure 6 |
 | D | Compteurs par classe pendant C | `show policy-map interface Serial2/0` | Figure 6 |
-| E | Vérification du marquage | `show policy-map interface FastEthernet1/0 input` (ou capture Wireshark sur le lien 3) | _à insérer_ |
+| E | Vérification du marquage | `show policy-map interface FastEthernet1/0 input` (ou capture Wireshark sur le lien 3) | Non réalisé (pas de capture) |
 
 ### 5.2 bis Créer le goulot d'étranglement et la congestion
 
